@@ -400,7 +400,7 @@ for config_idx, config in enumerate(configs):
     y_min, y_max = ax.get_ylim()
     ax.set_yticks([y_min, (y_min + y_max) / 2, y_max])
     
-    ax.legend(framealpha=0.4, fontsize=10)
+    ax.legend(framealpha=0.4, fontsize=10, handletextpad=0.2)
     ax.set_xlabel('k', fontsize=12)
     if config.ylabel is not None:
         ax.set_ylabel(config.ylabel, fontsize=12)
