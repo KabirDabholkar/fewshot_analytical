@@ -16,7 +16,7 @@ Reproduces this figure:
 
 1. **Clone the repository** (if not already done):
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/KabirDabholkar/fewshot_analytical.git
    cd fewshot_analytical
    ```
 
