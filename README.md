@@ -1,11 +1,11 @@
 # Few-Shot Analytical
 
-This repository contains code for running few-shot learning experiments with different analytical models including binary classification, linear regression, and Hidden Markov Models (HMM).
+This repository contains code for running few-shot learning with extraneous noise in the input. Includes three different settings: binary classification, linear regression, and Hidden Markov Models (HMM), along with theory.
 
 ## Features
 
-- **Binary Classification**: Prototype learning with class-dependent noise
-- **Linear Regression**: Linear regression with concatenated noise encoding
+- **Binary Classification**: Prototype learning with class-dependent noise (Sorscher et al., 2022)
+- **Linear Regression**: Linear regression with concatenated noise encoding (Hastie et al., 2022)
 - **HMM Models**: Flat and chain latent variable models with binomial MLE
 
 ## Installation
@@ -51,3 +51,9 @@ The script generates:
 
 - Python 3.7 or higher
 - pip package manager 
+
+## References
+
+Sorscher, Ben, Surya Ganguli, and Haim Sompolinsky. "Neural representational geometry underlies few-shot concept learning." Proceedings of the National Academy of Sciences 119.43 (2022): e2200800119.
+
+Hastie, Trevor, et al. "Surprises in high-dimensional ridgeless least squares interpolation." Annals of statistics 50.2 (2022): 949.
