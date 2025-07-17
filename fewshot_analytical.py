@@ -245,7 +245,7 @@ def create_binary_classification_config():
         encoders=encoders,
         labels=labels,
         theory=theory,
-        ylim=None
+        ylim=(-0.01, 0.5)
     )
 
 # Linear Regression Configuration
@@ -282,7 +282,7 @@ def create_linear_regression_config():
         sigCoding=sigCoding,
         repeats=50,
         title=None,
-        ylabel=None,
+        ylabel="Average $k$-shot" + "\n" + "MSE",
         ModelClass=LinearRegression,
         regression_type=f'LinearRegression_M{M}',
         loss=lambda pred, target: np.mean((pred - target)**2),
@@ -290,7 +290,7 @@ def create_linear_regression_config():
         encoders=encoders,
         labels=labels,
         theory=theory,
-        ylim=(0, 2)
+        ylim=(-0.04, 2.02)
     )
 
 # HMM Configuration
@@ -327,9 +327,9 @@ def create_hmm_config():
 
 # Create all configurations
 configs = [
-    create_binary_classification_config(),
+    create_hmm_config(),
     create_linear_regression_config(),
-    create_hmm_config()
+    create_binary_classification_config()
 ]
 
 # Select which configuration to use (for backward compatibility)
@@ -368,7 +368,7 @@ def run_experiment(config):
     return res
 
 # Create combined subplot
-fig, axes = plt.subplots(1, 3, figsize=np.array((4*3, 3))*0.65)
+fig, axes = plt.subplots(1, 3, figsize=np.array((4.3*3, 4))*0.56, sharex=True)
 
 # Generate colors for each configuration
 import matplotlib.cm as cm
@@ -392,14 +392,52 @@ for config_idx, config in enumerate(configs):
         if config.theory is not None:
             ax.plot(*config.theory[j], ls='dashed', color=colors[j])
     
-    ax.legend(framealpha=0.4, fontsize=8)
-    ax.set_xlabel('k')
+    # Remove top and right spines
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+    
+    # Set only three yticks
+    y_min, y_max = ax.get_ylim()
+    ax.set_yticks([y_min, (y_min + y_max) / 2, y_max])
+    
+    ax.legend(framealpha=0.4, fontsize=10)
+    ax.set_xlabel('k', fontsize=12)
     if config.ylabel is not None:
-        ax.set_ylabel(config.ylabel)
+        ax.set_ylabel(config.ylabel, fontsize=12)
     if config.ylim is not None:
         ax.set_ylim(*config.ylim)
+        # Update yticks after setting ylim
+        y_min, y_max = ax.get_ylim()
+        ax.set_yticks([y_min, (y_min + y_max) / 2, y_max])
+    
+    # Set specific yticks for binary classification
+    if config.name == "Binary Classification":
+        ax.set_yticks([0, 0.25, 0.5])
+
+    # Set specific yticks for linear regression
+    if config.name == "Linear Regression":
+        ax.set_yticks([0, 1, 2])
+    
+    # Format HMM yticks to two decimal places
+    if config.name == "HMM":
+        ax.yaxis.set_major_formatter(plt.FormatStrFormatter('%.2f'))
+    
+    # Restrict left spine to ytick range
+    yticks = ax.get_yticks()
+    if len(yticks) > 0:
+        ax.spines['left'].set_bounds(yticks[0], yticks[-1])
+    
+    # Restrict bottom spine to x range 10 to 1000
+    # ax.spines['bottom'].set_bounds(10, 1000)
+    
     ax.set_xscale('log')
-    ax.set_title(config.name)
+    
+    # Remove xticks beyond the range 10 to 1000
+    xticks = ax.get_xticks()
+    xticks_filtered = xticks[(xticks >= 10) & (xticks <= 1000)]
+    ax.set_xticks(xticks_filtered)
+    
+    ax.set_title(config.name, fontsize=12)
 
 plt.tight_layout()
 plt.savefig("plots/fewshot_analytical_combined_subplots.png", dpi=300)

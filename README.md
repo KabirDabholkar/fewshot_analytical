@@ -2,6 +2,10 @@
 
 This repository contains code for running few-shot learning with extraneous noise in the input. Includes three different settings: binary classification, linear regression, and Hidden Markov Models (HMM), along with theory.
 
+Reproduces this figure:
+![Combined subplots showing results for HMM, Linear Regression, and Binary Classification](plots/fewshot_analytical_combined_subplots.png)
+
+
 ## Features
 
 - **Binary Classification**: Prototype learning with class-dependent noise (Sorscher et al., 2022)
